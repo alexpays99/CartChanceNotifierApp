@@ -8,7 +8,7 @@ class CatalogListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemModel = ItemModel();
+    final itemModel = Provider.of<ItemModel>(context);
     final iconAdd = Icon(Icons.add);
     final iconAdded = Icon(Icons.check);
     final bool _isChecked = false;

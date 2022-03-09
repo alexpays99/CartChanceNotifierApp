@@ -7,7 +7,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final item = Provider.of<CardModel>(context);
+    final cartItem = Provider.of<CardModel>(context);
     var textTheme = Theme.of(context).textTheme.headline6;
 
     return Center(
@@ -20,21 +20,21 @@ class CardWidget extends StatelessWidget {
             child: ListView.builder(
                 shrinkWrap: true,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: item.cardItems.length,
+                itemCount: cartItem.cardItems.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                     child: Row(
                       children: [
-                        Text(item.cardItems[index].title, style: textTheme),
+                        Text(cartItem.cardItems[index].title, style: textTheme),
                         Expanded(child: Container()),
-                        Text('\$${item.cardItems[index].price}',
+                        Text('\$${cartItem.cardItems[index].price}',
                             style: textTheme),
                         Expanded(child: Container()),
                         IconButton(
                             onPressed: () {
                               Provider.of<CardModel>(context, listen: false)
-                                  .removeItem(item.cardItems[index]);
+                                  .removeItem(cartItem.cardItems[index]);
                             },
                             icon: const Icon(Icons.remove)),
                       ],
@@ -54,7 +54,7 @@ class CardWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Total price: \$${item.totalPrice}",
+                    "Total price: \$${cartItem.totalPrice}",
                     style: textTheme,
                   ),
                 ),

@@ -1,18 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_change_notifier_app/models/item_model.dart';
 import 'package:flutter_change_notifier_app/pages/cart_page.dart';
 import 'package:flutter_change_notifier_app/widgets/catalog_list_widget.dart';
+import 'package:provider/provider.dart';
 
-class CatalogPage extends StatelessWidget {
+class CatalogPage extends StatefulWidget {
   const CatalogPage({Key? key}) : super(key: key);
 
   @override
+  State<CatalogPage> createState() => _CatalogPageState();
+}
+
+class _CatalogPageState extends State<CatalogPage> {
+  @override
   Widget build(BuildContext context) {
+    final catalogItem = Provider.of<ItemModel>(context);
     var textTheme = Theme.of(context).textTheme.headline1;
-    final titleController = TextEditingController();
-    final priceController = TextEditingController();
+    var titleController = TextEditingController();
+    var priceController = TextEditingController();
 
-    void addToCatalog(String title, double price) {
+    @override
+    void dispose() {
+      titleController.dispose();
+      priceController.dispose();
+      super.dispose();
+    }
 
+    void addToCatalog(
+        TextEditingController titleController,
+        TextEditingController priceController,
+        ItemModel catalogItem,
+        BuildContext context) {
+      String title = titleController.text;
+      double price = double.parse(priceController.text);
+      catalogItem.item.title = title;
+      catalogItem.iitem.price = price;
+      final item = Item(catalogItem.item.title, catalogItem.iitem.price);
+      Provider.of<ItemModel>(context, listen: false).add(item);
     }
 
     return Scaffold(
@@ -62,6 +86,7 @@ class CatalogPage extends StatelessWidget {
                 height: 40,
                 child: TextField(
                     controller: titleController,
+                    keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                         labelText: 'Title', border: OutlineInputBorder())),
               ),
@@ -73,6 +98,7 @@ class CatalogPage extends StatelessWidget {
                 height: 40,
                 child: TextField(
                     controller: priceController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: 'Price', border: OutlineInputBorder())),
               ),
@@ -80,15 +106,14 @@ class CatalogPage extends StatelessWidget {
                 height: 10,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    //addToCatalog(titleController.toString(), priceController);
-                  },
-                  child: Container(
-                    width: 50, 
-                    child: const Center(
-                      child: Text('Add')
-                    ),
-                  ),
+                onPressed: () {
+                  addToCatalog(
+                      titleController, priceController, catalogItem, context);
+                },
+                child: Container(
+                  width: 50,
+                  child: const Center(child: Text('Add')),
+                ),
               ),
               const SizedBox(
                 height: 10,
