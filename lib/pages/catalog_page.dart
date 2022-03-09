@@ -8,17 +8,21 @@ class CatalogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme.headline1;
-    
+    final titleController = TextEditingController();
+    final priceController = TextEditingController();
+
+    void addToCatalog(String title, double price) {
+
+    }
+
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Catalog',style: textTheme)),
+          title: Center(child: Text('Catalog', style: textTheme)),
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CartPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CartPage()));
               },
               icon: const Icon(Icons.shopping_cart),
             )
@@ -40,13 +44,51 @@ class CatalogPage extends StatelessWidget {
                   children: [
                     const Text('Items: ',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24,)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        )),
                     IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {},
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 250,
+                height: 40,
+                child: TextField(
+                    controller: titleController,
+                    decoration: const InputDecoration(
+                        labelText: 'Title', border: OutlineInputBorder())),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 250,
+                height: 40,
+                child: TextField(
+                    controller: priceController,
+                    decoration: const InputDecoration(
+                        labelText: 'Price', border: OutlineInputBorder())),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    //addToCatalog(titleController.toString(), priceController);
+                  },
+                  child: Container(
+                    width: 50, 
+                    child: const Center(
+                      child: Text('Add')
+                    ),
+                  ),
               ),
               const SizedBox(
                 height: 10,

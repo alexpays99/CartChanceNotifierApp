@@ -28,7 +28,8 @@ class CardWidget extends StatelessWidget {
                       children: [
                         Text(item.cardItems[index].title, style: textTheme),
                         Expanded(child: Container()),
-                        Text('\$${item.cardItems[index].price}', style: textTheme),
+                        Text('\$${item.cardItems[index].price}',
+                            style: textTheme),
                         Expanded(child: Container()),
                         IconButton(
                             onPressed: () {
@@ -62,6 +63,30 @@ class CardWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     child: const Text('Buy'),
+                    onPressed: () {},
+                  )),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: Container(
+                //color: Colors.yellow,
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Download file: ",
+                    style: textTheme,
+                  ),
+                ),
+              )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    child: const Icon(Icons.download),
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.grey),),
                     onPressed: () {},
                   )),
             ],
