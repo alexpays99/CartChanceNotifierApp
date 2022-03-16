@@ -127,7 +127,7 @@ class _CatalogPageState extends State<CatalogPage> {
               ElevatedButton(
                 onPressed: () {
                   addToCatalog(
-                      titleController, priceController, catalogItem, context);
+                      titleController, priceController, catalogItem, context); 
                 },
                 child: Container(
                   width: 50,

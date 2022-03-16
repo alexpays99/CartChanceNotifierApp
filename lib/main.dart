@@ -11,7 +11,7 @@ Future <void> main() async {
   await Firebase.initializeApp();
   
   runApp(
-    MultiProvider(providers: [
+    MultiProvider(providers: [ 
     ChangeNotifierProvider(
       create: (_) => CardModel(),
     ),

@@ -24,16 +24,10 @@ class ItemModel extends ChangeNotifier {
   void removeFromCatalog(Item itemToRemove) {
     items.remove(itemToRemove);
     print(itemToRemove.id);
-    // firebaseItems.where('id', isEqualTo: itemToRemove.id).get().then((value) {
-    //   value.docs.forEach((element) {
-    //     firebaseItems.doc(element.id).delete().then((value) => print('successfull deleted'));
-    //   });
-    // });
     
     firebaseItems.where('id', isEqualTo: itemToRemove.id).get().then((value) {
       value.docs[itemToRemove.id.indexOf(itemToRemove.id)].reference.delete().then((value) => print('successfull deleted'));
     });
-    //firebaseItems.doc().delete();
     notifyListeners();
   }
 }
