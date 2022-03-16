@@ -1,40 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 
-class ItemModel extends ChangeNotifier{
-  late Item item = Item('title', 12.0);
+class ItemModel extends ChangeNotifier {
+  CollectionReference firebaseItems = FirebaseFirestore.instance.collection('items');
+  late Item item = Item(Uuid().v4(), 'apple', 20.0);
   final List<Item> items = [
-    // Item('Code Smell', 19.0),
-    // Item('Control Flow', 20.0),
-    // Item('Sprint', 21.0),
-    // Item('Heisenbug', 22.0),
-    // Item('Spaghetti', 23.0),
-    // Item('Hydra Code', 24.1),
-    // Item('Scope', 25.5),
-    // Item('Callback', 29.5),
-    // Item('Closure', 55.5),
-    // Item('Automata', 45.5),
-    // Item('Bit Shift', 12.0),
-    // Item('Currying', 100.0),
   ];
 
   Item get iitem => item;
 
-  //set item (Item item) => _item =item;
-
   void add(Item item) {
     items.add(item);
+    firebaseItems.add({
+      'id': item.id,
+      'name': item.title,
+      'price': item.price
+    });
+    print(item.id.toString());
     notifyListeners();
   }
 
-  void removeFromCatalog(Item item) {
-    items.remove(item);
+  void removeFromCatalog(Item itemToRemove) {
+    items.remove(itemToRemove);
+    print(itemToRemove.id);
+    // firebaseItems.where('id', isEqualTo: itemToRemove.id).get().then((value) {
+    //   value.docs.forEach((element) {
+    //     firebaseItems.doc(element.id).delete().then((value) => print('successfull deleted'));
+    //   });
+    // });
+    
+    firebaseItems.where('id', isEqualTo: itemToRemove.id).get().then((value) {
+      value.docs[itemToRemove.id.indexOf(itemToRemove.id)].reference.delete().then((value) => print('successfull deleted'));
+    });
+    //firebaseItems.doc().delete();
     notifyListeners();
   }
 }
 
 class Item {
+  String id = const Uuid().v4();
   String title;
   double price;
 
-  Item(this.title, this.price);
+  Item(this.id, this.title, this.price);
 }

@@ -4,8 +4,12 @@ import 'package:flutter_change_notifier_app/models/item_model.dart';
 import 'package:flutter_change_notifier_app/pages/catalog_page.dart';
 import 'package:provider/provider.dart';
 import 'theme/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  
   runApp(
     MultiProvider(providers: [
     ChangeNotifierProvider(

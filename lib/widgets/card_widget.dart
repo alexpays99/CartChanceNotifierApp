@@ -19,7 +19,6 @@ class CardWidget extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
                 shrinkWrap: true,
-                //physics: NeverScrollableScrollPhysics(),
                 itemCount: cartItem.cardItems.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(

@@ -14,10 +14,11 @@ class CatalogPage extends StatefulWidget {
 class _CatalogPageState extends State<CatalogPage> {
   @override
   Widget build(BuildContext context) {
-    final catalogItem = Provider.of<ItemModel>(context);
+    final catalogItem = Provider.of<ItemModel>(context); // have access to ItemModel 
     var textTheme = Theme.of(context).textTheme.headline1;
-    var titleController = TextEditingController();
-    var priceController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    TextEditingController priceController = TextEditingController();
+    String errorMessage = '';
 
     @override
     void dispose() {
@@ -26,17 +27,35 @@ class _CatalogPageState extends State<CatalogPage> {
       super.dispose();
     }
 
+    void showError() {
+      errorMessage = '* Fill all empty fields';
+      Text(
+        errorMessage,
+        style: const TextStyle(color: Color.fromARGB(255, 53, 53, 53)),
+      );
+    }
+
+    void checkForm(titleController, priceController) {
+      if (titleController == null || priceController == null) {
+        showError();
+      }
+    }
+
+    // add values from text field to catalog 
     void addToCatalog(
         TextEditingController titleController,
         TextEditingController priceController,
         ItemModel catalogItem,
         BuildContext context) {
-      String title = titleController.text;
-      double price = double.parse(priceController.text);
+      checkForm(titleController.text, priceController.text); // form validation
+      String? title = titleController.text;
+      double price = double.parse(priceController.text); // converting value from text field to double 
+
       catalogItem.item.title = title;
       catalogItem.iitem.price = price;
-      final item = Item(catalogItem.item.title, catalogItem.iitem.price);
-      Provider.of<ItemModel>(context, listen: false).add(item);
+
+      final item = Item(catalogItem.item.id, catalogItem.item.title, catalogItem.iitem.price); // create instance of item with entered values
+      Provider.of<ItemModel>(context, listen: false).add(item); // call "add" method and notifies listeners about changed value.
     }
 
     return Scaffold(
