@@ -1,5 +1,6 @@
 # CartChanceNotifierApp
-A Flutter sample app that shows a state management approach using the Provider package.
+A Flutter sample app that shows a state management approach using the Provider package. The app allows you to write your favorite products in the field and set a price for them, and add these products to the general catalog with a list of added products. User can add some amount of products from list to cart, where he can see another list of added products. Also it is possible to change list of products in cart and delete chosen item from catalog.
+Whenever you delete product from catalog, the screen changes its UI and this item disappears from catalog and data in firestore also will remove.
 
 ![recorderV2](https://user-images.githubusercontent.com/32728226/158661691-f730413a-ba9c-4594-94f3-23968efd0d73.gif)
 
