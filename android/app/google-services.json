@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "470484669111",
+    "project_id": "firestorecartproject",
+    "storage_bucket": "firestorecartproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470484669111:android:ca552fe74b24f7284b7332",
+        "android_client_info": {
+          "package_name": "com.example.flutter_change_notifier_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470484669111-0c46otqjem08il2plfa34de5k7fd65lv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzn4gFjtTorQq19wk0aGuiEIwecoVcFvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470484669111-0c46otqjem08il2plfa34de5k7fd65lv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "470484669111-ttnruaal9tnd5lljor7fi4r0udavpicu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterChangeNotifierApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

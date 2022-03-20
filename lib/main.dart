@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_change_notifier_app/models/card_model.dart';
+import 'package:flutter_change_notifier_app/models/item_model.dart';
 import 'package:flutter_change_notifier_app/pages/catalog_page.dart';
 import 'package:provider/provider.dart';
 import 'theme/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-    create: (_) => CardModel(),
-    child: const MyApp(),
-  ));
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  
+  runApp(
+    MultiProvider(providers: [ 
+    ChangeNotifierProvider(
+      create: (_) => CardModel(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => ItemModel(),
+    ),
+  ],
+  child: const MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,4 +35,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
