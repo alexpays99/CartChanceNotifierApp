@@ -36,6 +36,6 @@ class Item {
   String id = const Uuid().v4();
   String title;
   double price;
-
+ 
   Item(this.id, this.title, this.price);
 }
