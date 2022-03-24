@@ -4,9 +4,15 @@ import 'package:uuid/uuid.dart';
 
 class ItemModel extends ChangeNotifier {
   CollectionReference firebaseItems = FirebaseFirestore.instance.collection('items');
-  late Item item = Item(Uuid().v4(), 'apple', 20.0);
-  final List<Item> items = [
-  ];
+  Item item = Item(Uuid().v4(), 'apple', 20.0, 0);
+  final List<Item> items = [];
+  // int _counter = 0;
+
+  // int get counter => _counter;
+  // set counter(int value) {
+  //   _counter = value;
+  //   notifyListeners();
+  // }
 
   Item get iitem => item;
 
@@ -15,7 +21,8 @@ class ItemModel extends ChangeNotifier {
     firebaseItems.add({
       'id': item.id,
       'name': item.title,
-      'price': item.price
+      'price': item.price,
+      'amount': item.amount
     });
     print(item.id.toString());
     notifyListeners();
@@ -30,12 +37,24 @@ class ItemModel extends ChangeNotifier {
     });
     notifyListeners();
   }
+
+  void updateCatalog(Item itemToUpdate) {
+    item = Item(itemToUpdate.id, itemToUpdate.title, itemToUpdate.price, itemToUpdate.amount);
+    print(itemToUpdate.amount);
+    
+    firebaseItems.where('id', isEqualTo: itemToUpdate.id).get().then((value) {
+      value.docs[itemToUpdate.id.indexOf(itemToUpdate.id)].reference.update({'amount': itemToUpdate.amount}).then((value) => print('successfully updated'));
+    });
+    notifyListeners();
+  }
 }
 
 class Item {
   String id = const Uuid().v4();
   String title;
   double price;
+  int amount = 0;
+
  
-  Item(this.id, this.title, this.price);
+  Item(this.id, this.title, this.price, this.amount);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_change_notifier_app/models/card_model.dart';
 import 'package:flutter_change_notifier_app/models/item_model.dart';
 import 'package:flutter_change_notifier_app/pages/cart_page.dart';
 import 'package:flutter_change_notifier_app/widgets/catalog_list_widget.dart';
@@ -14,7 +15,8 @@ class CatalogPage extends StatefulWidget {
 class _CatalogPageState extends State<CatalogPage> {
   @override
   Widget build(BuildContext context) {
-    final catalogItem = Provider.of<ItemModel>(context); // have access to ItemModel 
+    final catalogItem = Provider.of<ItemModel>(context); // have access to ItemModel
+    final cartModel = Provider.of<CardModel>(context);
     var textTheme = Theme.of(context).textTheme.headline1;
     TextEditingController titleController = TextEditingController();
     TextEditingController priceController = TextEditingController();
@@ -41,7 +43,7 @@ class _CatalogPageState extends State<CatalogPage> {
       }
     }
 
-    // add values from text field to catalog 
+    // add values from text field to catalog
     void addToCatalog(
         TextEditingController titleController,
         TextEditingController priceController,
@@ -49,25 +51,51 @@ class _CatalogPageState extends State<CatalogPage> {
         BuildContext context) {
       checkForm(titleController.text, priceController.text); // form validation
       String? title = titleController.text;
-      double price = double.parse(priceController.text); // converting value from text field to double 
+      double price = double.parse(
+          priceController.text); // converting value from text field to double
 
-      catalogItem.item.title = title;
+      catalogItem.iitem.title = title;
       catalogItem.iitem.price = price;
 
-      final item = Item(catalogItem.item.id, catalogItem.item.title, catalogItem.iitem.price); // create instance of item with entered values
-      Provider.of<ItemModel>(context, listen: false).add(item); // call "add" method and notifies listeners about changed value.
+      final item = Item(
+          catalogItem.item.id,
+          catalogItem.item.title,
+          catalogItem
+              .item.price, catalogItem.item.amount); // create instance of item with entered values
+      Provider.of<ItemModel>(context, listen: false).add(
+          item); // call "add" method and notifies listeners about changed value.
     }
 
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text('Catalog', style: textTheme)),
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CartPage()));
-              },
-              icon: const Icon(Icons.shopping_cart),
+            Stack(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CartPage()));
+                    },
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    iconSize: 30.0),
+                Consumer<CardModel>(
+                  builder: ((context, value, child) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 35.0, left: 20.0),
+                      child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 252, 249, 249),
+                              borderRadius: BorderRadius.circular(50.0)),
+                          child: Center(child: Text(cartModel.counter.toString(), style: Theme.of(context).textTheme.bodyMedium))),
+                    );
+                  }),
+                ),
+              ],
             )
           ],
         ),
@@ -127,7 +155,7 @@ class _CatalogPageState extends State<CatalogPage> {
               ElevatedButton(
                 onPressed: () {
                   addToCatalog(
-                      titleController, priceController, catalogItem, context); 
+                      titleController, priceController, catalogItem, context);
                 },
                 child: Container(
                   width: 50,

@@ -16,59 +16,61 @@ class CardWidget extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme.headline6;
 
     Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
-  final path = (await getExternalStorageDirectory())!.path;
-  final file = File('$path/$fileName');
-  await file.writeAsBytes(bytes, flush: true);
-  OpenFile.open('$path/$fileName');
-}
-
-Future<void> createPDF(List<Item> items) async {
-  pw.PdfDocument document = pw.PdfDocument();
-
-  pw.PdfGrid grid = pw.PdfGrid();
-  grid.style = pw.PdfGridStyle(
-      font: pw.PdfStandardFont(pw.PdfFontFamily.helvetica, 30),
-      cellPadding: pw.PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
-
-  grid.columns.add(count: 3);
-  grid.headers.add(1);
-
-  pw.PdfGridRow header = grid.headers[0];
-
-  pw.PdfGridRow headersRow = grid.headers.add(1)[0];
-  header.cells[0].value = 'Name';
-  header.cells[1].value = 'Amount';
-  header.cells[2].value = 'Price';
-
-  items.where((item) => items.isNotEmpty).forEach((element) {
-    final row = grid.rows.add();
-    row.cells[0].value = element.title.toString();
-    //row.cells[1].value = element.price.toString();
-    row.cells[2].value = element.price.toString();
-
-    for (int i = 0; i < headersRow.cells.count; i++) {
-      headersRow.cells[i].style.cellPadding =
-          pw.PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+      final path = (await getExternalStorageDirectory())!.path;
+      final file = File('$path/$fileName');
+      await file.writeAsBytes(bytes, flush: true);
+      OpenFile.open('$path/$fileName');
     }
-  });
 
-  grid.draw(
-      page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
-      
+    Future<void> createPDF(List<Item> items) async {
+      pw.PdfDocument document = pw.PdfDocument();
 
-  pw.PdfPage page = document.pages[0];
+      pw.PdfGrid grid = pw.PdfGrid();
+      grid.style = pw.PdfGridStyle(
+          font: pw.PdfStandardFont(pw.PdfFontFamily.helvetica, 30),
+          cellPadding: pw.PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
 
-  final totalPrice = Provider.of<CardModel>(context, listen: false).totalPrice;
+      grid.columns.add(count: 3);
+      grid.headers.add(1);
 
-  page.graphics.drawString(
-      'Total price: \$${totalPrice.toString()}', pw.PdfStandardFont(pw.PdfFontFamily.helvetica, 30),
-      bounds: const Rect.fromLTWH(10, 300, 500, 40), );
+      pw.PdfGridRow header = grid.headers[0];
 
-  List<int> bytes = document.save();
-  document.dispose();
+      pw.PdfGridRow headersRow = grid.headers.add(1)[0];
+      header.cells[0].value = 'Name';
+      header.cells[1].value = 'Amount';
+      header.cells[2].value = 'Price';
 
-  saveAndLaunchFile(bytes, 'Receipt.pdf');
-}
+      items.where((item) => items.isNotEmpty).forEach((element) {
+        final row = grid.rows.add();
+        row.cells[0].value = element.title.toString();
+        //row.cells[1].value = element.price.toString();
+        row.cells[2].value = element.price.toString();
+
+        for (int i = 0; i < headersRow.cells.count; i++) {
+          headersRow.cells[i].style.cellPadding =
+              pw.PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+        }
+      });
+
+      grid.draw(
+          page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+      pw.PdfPage page = document.pages[0];
+
+      final totalPrice =
+          Provider.of<CardModel>(context, listen: false).totalPrice;
+
+      page.graphics.drawString(
+        'Total price: \$${totalPrice.toString()}',
+        pw.PdfStandardFont(pw.PdfFontFamily.helvetica, 30),
+        bounds: const Rect.fromLTWH(10, 300, 500, 40),
+      );
+
+      List<int> bytes = document.save();
+      document.dispose();
+
+      saveAndLaunchFile(bytes, 'Receipt.pdf');
+    }
 
     return Center(
       child: Column(
@@ -94,6 +96,9 @@ Future<void> createPDF(List<Item> items) async {
                             onPressed: () {
                               Provider.of<CardModel>(context, listen: false)
                                   .removeItem(cartItem.cardItems[index]);
+                                  
+                              Provider.of<CardModel>(context, listen: false)
+                                  .counter--;
                             },
                             icon: const Icon(Icons.remove)),
                       ],
@@ -158,6 +163,4 @@ Future<void> createPDF(List<Item> items) async {
       ),
     );
   }
-
-
 }
