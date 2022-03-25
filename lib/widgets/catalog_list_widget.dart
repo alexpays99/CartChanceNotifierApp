@@ -17,7 +17,8 @@ class _CatalogListWidgetState extends State<CatalogListWidget> {
     final itemModel = Provider.of<ItemModel>(context);
     final cartModel = Provider.of<CardModel>(context);
     final iconAdd = Icon(Icons.add); // adds to cart
-    final iconRemove = Icon(Icons.remove); // removes from catalog
+    final iconRemove =
+        Icon(Icons.remove, color: Colors.white); // removes from catalog
     var textTheme = Theme.of(context).textTheme.headline6;
 
     @override
@@ -44,6 +45,8 @@ class _CatalogListWidgetState extends State<CatalogListWidget> {
                       itemBuilder: (context, int index) {
                         QueryDocumentSnapshot<Object?>? doc =
                             snapshot.data?.docs[index];
+                        // Item item = Item(doc!['id'], doc['name'], doc['price'],
+                        //     doc['amount']);
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(
@@ -113,51 +116,40 @@ class _CatalogListWidgetState extends State<CatalogListWidget> {
                                                   doc['price'],
                                                   doc['amount']);
 
-                                              Provider.of<CardModel>(context,
-                                                              listen: false)
-                                                          .counter >=
-                                                      0
-                                                  ? Provider.of<CardModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .removeItem(cartModel
-                                                          .cardItems[index])
-                                                  : 0;
+                                              // Provider.of<CardModel>(context,
+                                              //                 listen: false)
+                                              //             .counter >=
+                                              //         0
+                                              //     ? Provider.of<CardModel>(
+                                              //             context,
+                                              //             listen: false)
+                                              //         .removeItem(cartModel
+                                              //             .cardItems[index])
+                                              //     : 0;
 
-                                              Provider.of<CardModel>(context,
-                                                              listen: false)
-                                                          .counter >=
-                                                      0
-                                                  ? Provider.of<CardModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .counter--
-                                                  : 0;
+                                              // Provider.of<CardModel>(context,
+                                              //                 listen: false)
+                                              //             .counter >=
+                                              //         0
+                                              //     ? Provider.of<CardModel>(
+                                              //             context,
+                                              //             listen: false)
+                                              //         .counter--
+                                              //     : 0;
 
                                               setState(() {
-                                                item.amount--;
+                                                item.amount >= 0 ? item.amount-- : 0;
                                                 Provider.of<ItemModel>(context,
                                                         listen: false)
                                                     .updateCatalog(item);
                                               });
                                             },
-                                            icon: const Icon(Icons.remove)),
-
-                                        // Expanded(child: Container()),
-                                        // Consumer<CardModel>(
-                                        //   builder: ((context, value, child) {
-                                        //     return Text(
-                                        //         counter.toString(),
-                                        //         style: Theme.of(context)
-                                        //             .textTheme
-                                        //             .bodyMedium);
-                                        //   }),
-                                        // ),
-                                        // Expanded(child: Container()),
+                                            icon: const Icon(Icons.remove,
+                                                color: Colors.white)),
                                         Text(doc['amount'].toString(),
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyMedium),
+                                                .bodyLarge),
                                         IconButton(
                                             iconSize: 20.0,
                                             onPressed: () {
@@ -182,7 +174,8 @@ class _CatalogListWidgetState extends State<CatalogListWidget> {
                                                     .updateCatalog(item);
                                               });
                                             },
-                                            icon: const Icon(Icons.add)),
+                                            icon: const Icon(Icons.add,
+                                                color: Colors.white)),
                                       ],
                                     ),
                                   )

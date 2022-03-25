@@ -4,6 +4,7 @@ import 'package:flutter_change_notifier_app/models/item_model.dart';
 import 'package:flutter_change_notifier_app/pages/cart_page.dart';
 import 'package:flutter_change_notifier_app/widgets/catalog_list_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class CatalogPage extends StatefulWidget {
   const CatalogPage({Key? key}) : super(key: key);
@@ -54,10 +55,11 @@ class _CatalogPageState extends State<CatalogPage> {
       double price = double.parse(
           priceController.text); // converting value from text field to double
 
-      catalogItem.iitem.title = title;
-      catalogItem.iitem.price = price;
+      catalogItem.item.title = title;
+      catalogItem.item.price = price;
+      catalogItem.item.id = const Uuid().v4();
 
-      final item = Item(
+      Item item = Item(
           catalogItem.item.id,
           catalogItem.item.title,
           catalogItem
@@ -159,7 +161,7 @@ class _CatalogPageState extends State<CatalogPage> {
                 },
                 child: Container(
                   width: 50,
-                  child: const Center(child: Text('Add')),
+                  child: const Center(child: Text('Add', style: TextStyle(color: Colors.white),)),
                 ),
               ),
               const SizedBox(

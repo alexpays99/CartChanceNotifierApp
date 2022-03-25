@@ -6,17 +6,10 @@ class ItemModel extends ChangeNotifier {
   CollectionReference firebaseItems = FirebaseFirestore.instance.collection('items');
   Item item = Item(Uuid().v4(), 'apple', 20.0, 0);
   final List<Item> items = [];
-  // int _counter = 0;
 
-  // int get counter => _counter;
-  // set counter(int value) {
-  //   _counter = value;
-  //   notifyListeners();
-  // }
-
-  Item get iitem => item;
-
-  void add(Item item) {
+  void add(Item addItem) {
+    //addItem.id = const Uuid().v4.toString();
+    //item = Item(addItem.id, addItem.title, addItem.price, addItem.amount);
     items.add(item);
     firebaseItems.add({
       'id': item.id,
@@ -50,7 +43,7 @@ class ItemModel extends ChangeNotifier {
 }
 
 class Item {
-  String id = const Uuid().v4();
+  String id = Uuid().v4();
   String title;
   double price;
   int amount = 0;
