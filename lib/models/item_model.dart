@@ -8,8 +8,6 @@ class ItemModel extends ChangeNotifier {
   final List<Item> items = [];
 
   void add(Item addItem) {
-    //addItem.id = const Uuid().v4.toString();
-    //item = Item(addItem.id, addItem.title, addItem.price, addItem.amount);
     items.add(item);
     firebaseItems.add({
       'id': item.id,

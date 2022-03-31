@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_change_notifier_app/models/card_model.dart';
 import 'package:flutter_change_notifier_app/models/item_model.dart';
@@ -17,11 +18,17 @@ class _CatalogPageState extends State<CatalogPage> {
   @override
   Widget build(BuildContext context) {
     final catalogItem = Provider.of<ItemModel>(context); // have access to ItemModel
-    final cartModel = Provider.of<CardModel>(context);
+    final cartModel = Provider.of<CardModel>(context); // have access to CartModel
     var textTheme = Theme.of(context).textTheme.headline1;
-    TextEditingController titleController = TextEditingController();
-    TextEditingController priceController = TextEditingController();
+    TextEditingController titleController = TextEditingController(); // title contoller
+    TextEditingController priceController = TextEditingController(); // price controller
     String errorMessage = '';
+    
+    @override
+    void initState() {
+      super.initState();
+      FirebaseAuth.instance.signOut();
+    }
 
     @override
     void dispose() {
@@ -29,7 +36,8 @@ class _CatalogPageState extends State<CatalogPage> {
       priceController.dispose();
       super.dispose();
     }
-
+    
+    // show error text if input values in empty
     void showError() {
       errorMessage = '* Fill all empty fields';
       Text(
@@ -38,6 +46,7 @@ class _CatalogPageState extends State<CatalogPage> {
       );
     }
 
+    // check input values
     void checkForm(titleController, priceController) {
       if (titleController == null || priceController == null) {
         showError();
@@ -51,21 +60,19 @@ class _CatalogPageState extends State<CatalogPage> {
         ItemModel catalogItem,
         BuildContext context) {
       checkForm(titleController.text, priceController.text); // form validation
-      String? title = titleController.text;
-      double price = double.parse(
-          priceController.text); // converting value from text field to double
+      String? title = titleController.text; // input value converting to string.
+      double price = double.parse(priceController.text); // converting value from text field to double
 
       catalogItem.item.title = title;
       catalogItem.item.price = price;
-      catalogItem.item.id = const Uuid().v4();
+      catalogItem.item.id = const Uuid().v4(); // generating uniq id for new item.
 
       Item item = Item(
           catalogItem.item.id,
           catalogItem.item.title,
-          catalogItem
-              .item.price, catalogItem.item.amount); // create instance of item with entered values
-      Provider.of<ItemModel>(context, listen: false).add(
-          item); // call "add" method and notifies listeners about changed value.
+          catalogItem.item.price,
+          catalogItem.item.amount); // create instance of item with entered values
+      Provider.of<ItemModel>(context, listen: false).add(item); // call "add" method and notifies listeners about created item.
     }
 
     return Scaffold(
@@ -76,13 +83,12 @@ class _CatalogPageState extends State<CatalogPage> {
               children: [
                 IconButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CartPage()));
+                      // move to cart page
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => const CartPage()));
                     },
                     icon: const Icon(Icons.shopping_cart_outlined),
                     iconSize: 30.0),
+                // shows actual amount of in cart
                 Consumer<CardModel>(
                   builder: ((context, value, child) {
                     return Padding(
@@ -91,9 +97,12 @@ class _CatalogPageState extends State<CatalogPage> {
                           width: 20,
                           height: 20,
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 252, 249, 249),
+                              color: Color.fromARGB(255, 252, 249, 249),
                               borderRadius: BorderRadius.circular(50.0)),
-                          child: Center(child: Text(cartModel.counter.toString(), style: Theme.of(context).textTheme.bodyMedium))),
+                          child: Center(
+                              child: Text(cartModel.counter.toString(),
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium))),
                     );
                   }),
                 ),
@@ -133,7 +142,7 @@ class _CatalogPageState extends State<CatalogPage> {
               SizedBox(
                 width: 250,
                 height: 40,
-                child: TextField(
+                child: TextField( // text field to set title
                     controller: titleController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
@@ -145,7 +154,7 @@ class _CatalogPageState extends State<CatalogPage> {
               SizedBox(
                 width: 250,
                 height: 40,
-                child: TextField(
+                child: TextField( // text field to set price
                     controller: priceController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -156,18 +165,20 @@ class _CatalogPageState extends State<CatalogPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  addToCatalog(
-                      titleController, priceController, catalogItem, context);
+                  //add to list in catalog created item 
+                  addToCatalog(titleController, priceController, catalogItem, context);
                 },
                 child: Container(
                   width: 50,
-                  child: const Center(child: Text('Add', style: TextStyle(color: Colors.white),)),
+                  child: const Center(
+                      child: Text('Add',style: TextStyle(color: Colors.white),
+                  )),
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const CatalogListWidget(),
+              const CatalogListWidget(), // widget to show list of items
             ],
           ),
         ));
